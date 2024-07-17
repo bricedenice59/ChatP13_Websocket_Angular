@@ -1,0 +1,36 @@
+.image {
+  width: 60%; /* Adjust width for mobile */
+  max-width: 500px; /* Set a maximum width */
+  height: auto; /* Allow height to adjust proportionally */
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  gap: 120px; /* Add spacing between buttons */
+  margin-top: 30px; /* Add margin between rows */
+}
+
+.container {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center horizontally */
+  justify-content: center;
+  height: 100vh; /* Full viewport height */
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 1px solid black !important;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    gap: 30px;
+  }
+  .button-container {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
