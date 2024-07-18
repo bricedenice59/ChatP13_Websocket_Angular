@@ -8,6 +8,7 @@ import {Subscription} from "rxjs";
 import {AuthService} from "../../core/services/auth/auth.service";
 import {LoginRequest} from "../../core/payloads/auth/loginRequest.interface";
 import {HttpClientModule} from "@angular/common/http";
+import {SessionInformation} from "../../core/interfaces/SessionInformation";
 
 @Component({
   selector: 'app-login',
@@ -52,8 +53,9 @@ export class LoginComponent implements OnDestroy {
   public submit(): void {
     const loginRequest = this.form.value as LoginRequest;
     this.loginSubscription$ = this.authService.login(loginRequest).subscribe({
-      next: (response: boolean): void => {
+      next: (response: SessionInformation): void => {
         if(response){
+          sessionStorage.setItem("token", response.token);
           sessionStorage.setItem("name", loginRequest.name);
           this.router.navigate(['/chat']);
           return;

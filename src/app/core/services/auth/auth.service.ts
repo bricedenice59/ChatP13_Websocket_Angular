@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoginRequest } from '../../payloads/auth/loginRequest.interface';
+import {SessionInformation} from "../../interfaces/SessionInformation";
 
 
 @Injectable({
@@ -13,7 +14,7 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public login(loginRequest: LoginRequest): Observable<boolean> {
-    return this.httpClient.post<boolean>(`${this.pathService}/login`, loginRequest);
+  public login(loginRequest: LoginRequest): Observable<SessionInformation> {
+    return this.httpClient.post<SessionInformation>(`${this.pathService}/login`, loginRequest);
   }
 }
