@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, inject, OnDestroy} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatInput} from "@angular/material/input";
@@ -7,8 +7,8 @@ import {NgIf} from "@angular/common";
 import {Subscription} from "rxjs";
 import {AuthService} from "../../core/services/auth/auth.service";
 import {LoginRequest} from "../../core/payloads/auth/loginRequest.interface";
-import {HttpClientModule} from "@angular/common/http";
 import {SessionInformation} from "../../core/interfaces/SessionInformation";
+import {AppStorageService} from "../../core/services/app-storage";
 
 @Component({
   selector: 'app-login',
@@ -23,6 +23,7 @@ import {SessionInformation} from "../../core/interfaces/SessionInformation";
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnDestroy {
+  public readonly appStorage: AppStorageService = inject(AppStorageService);
   public loginSubscription$: Subscription | undefined;
   public onError = false;
   public form: FormGroup<{ name: FormControl<string | null>; password: FormControl<string | null>; }>
@@ -55,8 +56,8 @@ export class LoginComponent implements OnDestroy {
     this.loginSubscription$ = this.authService.login(loginRequest).subscribe({
       next: (response: SessionInformation): void => {
         if(response){
-          sessionStorage.setItem("token", response.token);
-          sessionStorage.setItem("name", loginRequest.name);
+          this.appStorage.setToken(response.token)
+          this.appStorage.setMe(loginRequest.name)
           this.router.navigate(['/chat']);
           return;
         }

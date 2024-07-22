@@ -7,6 +7,13 @@ import SockJS from "sockjs-client";
 })
 export abstract class WebsocketService {
   protected stompClient!: Stomp.Client | null;
+  protected readonly headers: {Authorization: string};
+
+  protected constructor(token: string|null) {
+    this.headers = {
+      Authorization: `Bearer ${token}`
+    };
+  }
 
   private initialize() : boolean {
     try {
@@ -19,18 +26,14 @@ export abstract class WebsocketService {
     }
   }
 
-  public connect(jwtToken: string): void {
+  public connect(): void {
     if(!this.initialize())
       return;
 
     console.log("initialized");
 
-    const headers = {
-      Authorization: `Bearer ${jwtToken}`
-    };
-
     try {
-      this.stompClient!.connect(headers, this.onConnect.bind(this), this.onError.bind(this));
+      this.stompClient!.connect(this.headers, this.onConnect.bind(this), this.onError.bind(this));
     } catch (error) {
       this.onError('An error occurred when trying to connect to websocket: ' + error);
     }
