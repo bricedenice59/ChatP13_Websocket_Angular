@@ -1,4 +1,5 @@
-@if(!this.onError){
+
+@if(this.chatService.connected && !this.chatService.hasError){
   <div>
     @if(!this.hasRecipientJoined){
       <div class="waiting-guest-container">
@@ -7,6 +8,7 @@
       </div>
     }
     @else{
+      <button mat-flat-button color="primary" type="submit" (click)="chatService.disconnect()">Disconnect</button>
       <div class="chat-container">
         <div class="chat-box" #chatBox>
           <ul class="chat-module__messages-list">
@@ -36,9 +38,13 @@
       </div>
     }
   </div>
-} @else {
+}
+@else {
     <div>
-      <p class="error">An error occurred</p>
+      <p>Connection status: {{this.chatService.connected ? "Connected" : "Disconnected"}}</p>
+      @if(this.chatService.hasError){
+        <p class="error">An error occurred, please check the console</p>
+      }
     </div>
 }
 

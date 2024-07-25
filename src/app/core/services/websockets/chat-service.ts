@@ -8,11 +8,14 @@ import {chatServiceFactory} from "../../factories/chat-auth-token-factory";
   useFactory: chatServiceFactory
 })
 export class ChatService extends WebsocketService {
+  private readonly topicEndpoint: string = '/user/topic';
+  private readonly joinEndpoint: string = '/topic/join';
   public connected: boolean = false;
   public hasError: boolean = false;
 
   constructor(authToken: string|null) {
     super(authToken);
+    this.setOnDisconnecting(this.handleOnDisconnecting.bind(this));
   }
 
   protected override onConnect(frame: Frame | undefined): void {
@@ -22,13 +25,30 @@ export class ChatService extends WebsocketService {
 
     this.subscribeToEndpoints();
 
-    this.onConnectionReady();
+    this.onConnectionStateChanged(true);
+  }
+
+  protected onDisconnect(): void {
+    this.connected = false;
+    console.log("Disconnected...");
+    this.onConnectionStateChanged(false);
+  }
+
+  private handleOnDisconnecting(): void {
+    console.log("Disconnecting...");
+    this.unsubscribeFromEndpoints();
   }
 
   private subscribeToEndpoints() : void {
     console.log("subscribe to websocket endpoints...");
-    this.stompClient!.subscribe('/user/topic', this.onMessageReceived);
-    this.stompClient!.subscribe('/topic/join', this.onUserHasJoinedOrLeft);
+    this.stompClient!.subscribe(this.topicEndpoint, this.onMessageReceived);
+    this.stompClient!.subscribe(this.joinEndpoint, this.onUserHasJoinedOrLeft);
+  }
+
+  private unsubscribeFromEndpoints() : void {
+    console.log("unsubscribe from websocket endpoints...");
+    this.stompClient!.unsubscribe(this.topicEndpoint);
+    this.stompClient!.unsubscribe(this.joinEndpoint);
   }
 
   protected override onError(error: string | Frame): void {
@@ -73,13 +93,12 @@ export class ChatService extends WebsocketService {
     console.log('Join message sent');
   };
 
-
-  public onConnectionReady: (...args: any[]) => any = () => {};
+  public onConnectionStateChanged: (status: boolean) => any = () => {};
   public onMessageReceived: (message: Message) => void = () => {};
   public onUserHasJoinedOrLeft: (message: Message) => void = () => {};
 
-  public setOnConnectionReady = (callback: (...args: any[]) => any): void => {
-    this.onConnectionReady = callback;
+  public setOnConnectionStateChanged = (callback: (status: boolean) => any): void => {
+    this.onConnectionStateChanged = callback;
   };
   public setOnMessageReceived = (callback: (message: Message) => void): void => {
     this.onMessageReceived = callback;

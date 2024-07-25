@@ -24,11 +24,11 @@ import {SpinLoaderComponent} from "../../components/spin-loader/spin-loader.comp
   styleUrl: './chat.component.css'
 })
 export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
-  private readonly chatService : ChatService = inject(ChatService);
+  protected readonly chatService : ChatService = inject(ChatService);
   public readonly appStorage: AppStorageService = inject(AppStorageService);
   @ViewChild('chatBox') private chatBox: ElementRef | undefined;
 
-  public onError = false;
+  public disconnected = true;
   public form: FormGroup<{ message: FormControl<string | null>;}>
   public token: string | null = null;
   public me: string | null = null;
@@ -50,7 +50,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.resetChat();
     this.chatService.setOnUserHasJoinedOrLeft(this.handleNewUserJoiningLeaving.bind(this));
     this.chatService.setOnMessageReceived(this.handleNewMessageComingIn.bind(this));
-    this.chatService.setOnConnectionReady(this.joinChat.bind(this));
+    this.chatService.setOnConnectionStateChanged(this.connectionStateChanged.bind(this));
 
     if(this.appStorage.getToken() == null)
       return;
@@ -67,8 +67,15 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.scrollToBottom();
   }
 
-  joinChat(): void {
-    this.chatService.join();
+  connectionStateChanged(state: boolean): void {
+    if(state)
+    {
+      this.disconnected = false;
+      this.chatService.join();
+    }
+    else {
+      this.disconnected = true;
+    }
   }
 
   scrollToBottom(): void {

@@ -44,17 +44,20 @@ export abstract class WebsocketService {
       if (!this.stompClient) {
         return;
       }
-      this.stompClient!.unsubscribe('/user/specific');
+      this.onDisconnecting();
 
-      this.stompClient!.disconnect(() => {
-        console.log('Client is now disconnected');
-        this.stompClient = null;
-      });
+      this.stompClient!.disconnect(this.onDisconnect.bind(this));
     } catch (error) {
-      console.error(error);
+      this.onError('An error occurred when trying to disconnect from websocket: ' + error);
     }
   };
 
   protected abstract onConnect(frame: Frame | undefined): void;
+  protected abstract onDisconnect(): void;
   protected abstract onError(error: string | Frame): void;
+  protected onDisconnecting: () => void = () => {};
+
+  protected setOnDisconnecting = (callback: () => any): void => {
+    this.onDisconnecting = callback;
+  };
 }
