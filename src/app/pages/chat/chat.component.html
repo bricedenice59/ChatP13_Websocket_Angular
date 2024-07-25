@@ -7,7 +7,31 @@
       </div>
     }
     @else{
-
+      <div class="chat-container">
+        <div class="chat-box" #chatBox>
+          <ul class="chat-module__messages-list">
+            @for(message of this.messages; let index = $index; track index){
+              <li>
+                <div class="message-container" [ngClass]="{'my-message': message.senderName === this.me, 'recipient-message': message.senderName !== this.me}">
+                  <p class="sender-name">{{ (message.senderName) }}</p>
+                  <span class="message">{{message.msg}}</span>
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
+        <div class="form-box">
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="input-group">
+              <label for="user-message">Your message</label>
+              <input matInput type="text" formControlName="message" id="user-message" class="message-input">
+            </div>
+            <div class="submit-button">
+              <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">Send message</button>
+            </div>
+          </form>
+        </div>
+      </div>
     }
   </div>
 } @else {
