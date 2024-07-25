@@ -27,8 +27,8 @@ export class ChatService extends WebsocketService {
 
   private subscribeToEndpoints() : void {
     console.log("subscribe to websocket endpoints...");
-    this.stompClient!.subscribe('/user/topic', this.onNewMessage);
-    this.stompClient!.subscribe('/topic/join', this.onNewUser);
+    this.stompClient!.subscribe('/user/topic', this.onMessageReceived);
+    this.stompClient!.subscribe('/topic/join', this.onUserHasJoinedOrLeft);
   }
 
   protected override onError(error: string | Frame): void {
@@ -75,17 +75,16 @@ export class ChatService extends WebsocketService {
 
 
   public onConnectionReady: (...args: any[]) => any = () => {};
-  public onNewMessage: (message: Message) => void = () => {};
-  public onNewUser: (message: Message) => void = () => {};
+  public onMessageReceived: (message: Message) => void = () => {};
+  public onUserHasJoinedOrLeft: (message: Message) => void = () => {};
 
   public setOnConnectionReady = (callback: (...args: any[]) => any): void => {
     this.onConnectionReady = callback;
   };
-  public setOnNewMessage = (callback: (message: Message) => void): void => {
-    this.onNewMessage = callback;
+  public setOnMessageReceived = (callback: (message: Message) => void): void => {
+    this.onMessageReceived = callback;
   };
-  public setOnNewUser = (callback: (message: Message) => void): void => {
-    this.onNewUser = callback;
+  public setOnUserHasJoinedOrLeft = (callback: (message: Message) => void): void => {
+    this.onUserHasJoinedOrLeft = callback;
   };
-
 }

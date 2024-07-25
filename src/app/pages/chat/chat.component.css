@@ -1,0 +1,101 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  height: 500px; /* Fixed height for the container */
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.waiting-guest-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+}
+
+.waiting-guest-message {
+  text-align: center; /* Optional: Center text inside the container */
+}
+
+.chat-box {
+  flex: 1;
+  height: 400px; /* Fixed height for the chat box */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.chat-module__messages-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chat-module__messages-list li {
+  margin-bottom: 10px;
+}
+
+.message-container {
+  display: inline-block;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 60%;
+  position: relative;
+}
+
+.sender-name {
+  font-weight: bold;
+  font-size: 10px;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px; /* Fixed width for the sender name */
+}
+
+.message {
+  display: block;
+}
+
+.my-message {
+  background-color: green;
+  color: white;
+  text-align: left;
+  float: left;
+  clear: both;
+}
+
+.recipient-message {
+  background-color: grey;
+  color: white;
+  text-align: right;
+  float: right;
+  clear: both;
+}
+
+.form-box {
+  padding: 10px;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.input-group {
+  margin-top: 10px;
+}
+
+.message-input{
+  width: 300px;
+  margin-left: 10px;
+}
+
+.submit-button {
+  margin-top: 10px;
+}
+
+.error {
+  color: red;
+}

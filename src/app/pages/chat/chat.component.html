@@ -1,15 +1,18 @@
-<div>
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <div class="input-group">
-      <label for="user-message">Your message</label>
-      <input matInput type="text"
-             formControlName="message"
-             id="user-message">
+@if(!this.onError){
+  <div>
+    @if(!this.hasRecipientJoined){
+      <div class="waiting-guest-container">
+        <p class="waiting-guest-message">Waiting for guest to join...</p>
+        <app-spin-loader></app-spin-loader>
+      </div>
+    }
+    @else{
+
+    }
+  </div>
+} @else {
+    <div>
+      <p class="error">An error occurred</p>
     </div>
-    <div class="submit-button">
-      <p *ngIf="onError" class="error">An error occurred</p>
-      <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">Send message</button>
-    </div>
-  </form>
-  <div id="messages"></div>
-</div>
+}
+
