@@ -93,8 +93,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
             return;
           }
           //a user joined, set him as our recipient in our one <-> one conversation
-          this.appStorage.setRecipient(senderName);
-          this.hasRecipientJoined = true;
+          this.setRecipientOnUserJoinedOrChat(senderName);
           break;
         }
         case 'LEAVE': {
@@ -120,12 +119,17 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       const parsedMessage = JSON.parse(message.body);
       const { content, senderName } = parsedMessage;
 
-      if(this.appStorage.getRecipient() === null){
-        this.appStorage.setRecipient(senderName);
-      }
+      this.setRecipientOnUserJoinedOrChat(senderName);
 
       const chatMessage: ChatMessage = {msg: content, isMe: senderName === this.me, senderName: senderName};
       this.messages.push(chatMessage);
+    }
+  }
+
+  private setRecipientOnUserJoinedOrChat(senderName: string): void{
+    if(this.appStorage.getRecipient() === null){
+      this.appStorage.setRecipient(senderName);
+      this.hasRecipientJoined = true;
     }
   }
 
