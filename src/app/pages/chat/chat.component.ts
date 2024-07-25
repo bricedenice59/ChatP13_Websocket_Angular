@@ -28,7 +28,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   public readonly appStorage: AppStorageService = inject(AppStorageService);
   @ViewChild('chatBox') private chatBox: ElementRef | undefined;
 
-  public disconnected = true;
   public form: FormGroup<{ message: FormControl<string | null>;}>
   public token: string | null = null;
   public me: string | null = null;
@@ -67,14 +66,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.scrollToBottom();
   }
 
-  connectionStateChanged(state: boolean): void {
-    if(state)
-    {
-      this.disconnected = false;
+  connectionStateChanged(status: boolean): void {
+    if(status) {
       this.chatService.join();
-    }
-    else {
-      this.disconnected = true;
     }
   }
 
