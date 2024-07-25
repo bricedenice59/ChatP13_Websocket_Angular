@@ -36,15 +36,32 @@
 }
 
 .chat-module__messages-list li {
-  margin-bottom: 10px;
+  margin-bottom: 10px; /* Add space between messages */
+}
+
+.message-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Default alignment for sender name */
+}
+
+.my-message-wrapper {
+  align-items: flex-start; /* Align sender name to the left for your messages */
+}
+
+.recipient-message-wrapper {
+  align-items: flex-end; /* Align sender name to the right for receiver's messages */
 }
 
 .message-container {
   display: inline-block;
   padding: 10px;
   border-radius: 10px;
-  max-width: 60%;
+  width: 40%; /* Set width to 50% of the chat container */
+  word-wrap: break-word; /* Break long words */
+  white-space: pre-wrap; /* Wrap text to multiple lines */
   position: relative;
+  margin-bottom: 10px; /* Ensure margin is applied to the message container */
 }
 
 .sender-name {
@@ -55,9 +72,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100px; /* Fixed width for the sender name */
-}
-
-.message {
   display: block;
 }
 

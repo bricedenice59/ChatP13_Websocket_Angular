@@ -12,9 +12,11 @@
           <ul class="chat-module__messages-list">
             @for(message of this.messages; let index = $index; track index){
               <li>
-                <div class="message-container" [ngClass]="{'my-message': message.senderName === this.me, 'recipient-message': message.senderName !== this.me}">
+                <div class="message-wrapper" [ngClass]="{'my-message-wrapper': message.senderName === this.me, 'recipient-message-wrapper': message.senderName !== this.me}">
                   <p class="sender-name">{{ (message.senderName) }}</p>
-                  <span class="message">{{message.msg}}</span>
+                  <div class="message-container" [ngClass]="{'my-message': message.senderName === this.me, 'recipient-message': message.senderName !== this.me}">
+                    <span class="message">{{message.msg}}</span>
+                  </div>
                 </div>
               </li>
             }

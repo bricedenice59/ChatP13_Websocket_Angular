@@ -47,6 +47,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.resetChat();
     this.chatService.setOnUserHasJoinedOrLeft(this.handleNewUserJoiningLeaving.bind(this));
     this.chatService.setOnMessageReceived(this.handleNewMessageComingIn.bind(this));
     this.chatService.setOnConnectionReady(this.joinChat.bind(this));
@@ -99,12 +100,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         case 'LEAVE': {
           //no need to notify myself that I have left
           if(senderName === this.me){
-            this.resetChatOnAnyUserLeft();
+            this.resetChat();
             return;
           }
-          //recipient has left, delete it
-          this.appStorage.deleteRecipient();
-          this.resetChatOnAnyUserLeft();
+          //recipient has left
+
+          this.resetChat();
           break;
         }
         default:
@@ -133,7 +134,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
-  private resetChatOnAnyUserLeft(): void{
+  private resetChat(): void{
+    this.appStorage.deleteRecipient();
     this.hasRecipientJoined = false;
     this.messages.length = 0;
   }
